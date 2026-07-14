@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "outDir": "bin",
+        "target": "es2020",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "declaration": true,
+        "sourceMap": true,
+        "stripInternal": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "strict": true,
+        "esModuleInterop": true
+    }
+}
