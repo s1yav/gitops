@@ -1,5 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
-import * as gcp from "@pulumi/gcp";
+import * as cloudbuildv2 from "@pulumi/gcp/cloudbuildv2";
 
 export interface GitRepositoryArgs {
     /**
@@ -34,13 +34,13 @@ export interface GitRepositoryArgs {
  * Links a GitHub repository to an existing Cloud Build Gen 2 connection.
  */
 export class GitRepository extends pulumi.ComponentResource {
-    public readonly repository: gcp.cloudbuildv2.Repository;
+    public readonly repository: cloudbuildv2.Repository;
 
     constructor(name: string, args: GitRepositoryArgs, opts?: pulumi.ComponentResourceOptions) {
         super("custom:components:GitRepository", name, args, opts);
 
         // Link the GitHub repository to the parent Cloud Build Connection
-        this.repository = new gcp.cloudbuildv2.Repository(name, {
+        this.repository = new cloudbuildv2.Repository(name, {
             location: args.location,
             name: args.repoName,
             parentConnection: args.parentConnection,

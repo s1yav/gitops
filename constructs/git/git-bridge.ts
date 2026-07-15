@@ -1,6 +1,8 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
 import * as std from "@pulumi/std";
+import * as cloudbuildv2 from "@pulumi/gcp/cloudbuildv2";
+import * as secretmanager from "@pulumi/gcp/secretmanager";
 
 export interface GitBridgeArgs {
     /**
@@ -42,15 +44,15 @@ export interface GitBridgeArgs {
  * Cloud Build to access it, and creates the Cloud Build Gen 2 connection to GitHub.
  */
 export class GitBridge extends pulumi.ComponentResource {
-    public readonly connection: gcp.cloudbuildv2.Connection;
-    public readonly secret: gcp.secretmanager.Secret;
-    public readonly secretVersion: gcp.secretmanager.SecretVersion;
+    public readonly connection: cloudbuildv2.Connection;
+    public readonly secret: secretmanager.Secret;
+    public readonly secretVersion: secretmanager.SecretVersion;
 
     constructor(name: string, args: GitBridgeArgs, opts?: pulumi.ComponentResourceOptions) {
         super("custom:components:GitBridge", name, args, opts);
 
         // 1. Create the secret in Secret Manager to hold the token
-        const githubTokenSecret = new gcp.secretmanager.Secret(`${name}-secret`, {
+        const githubTokenSecret = new secretmanager.Secret(`${name}-secret`, {
             secretId: args.secretId,
             replication: {
                 auto: {},
@@ -58,7 +60,7 @@ export class GitBridge extends pulumi.ComponentResource {
         }, { parent: this });
 
         // 2. Add the secret version reading from the local token file
-        const githubTokenSecretVersion = new gcp.secretmanager.SecretVersion(`${name}-secret-version`, {
+        const githubTokenSecretVersion = new secretmanager.SecretVersion(`${name}-secret-version`, {
             secret: githubTokenSecret.id,
             secretData: pulumi.output(args.tokenFilePath).apply(path =>
                 std.file({ input: path }).then(invoke => invoke.result)
@@ -87,13 +89,13 @@ export class GitBridge extends pulumi.ComponentResource {
         );
 
         // 5. Attach the IAM policy to the secret
-        const secretPolicyBinding = new gcp.secretmanager.SecretIamPolicy(`${name}-policy`, {
+        const secretPolicyBinding = new secretmanager.SecretIamPolicy(`${name}-policy`, {
             secretId: githubTokenSecret.secretId,
             policyData: secretAccessorPolicy.apply(policy => policy.policyData),
         }, { parent: this });
 
         // 6. Create the Cloud Build Gen 2 Connection
-        this.connection = new gcp.cloudbuildv2.Connection(name, {
+        this.connection = new cloudbuildv2.Connection(name, {
             location: args.location,
             name: args.connectionName,
             githubConfig: {
