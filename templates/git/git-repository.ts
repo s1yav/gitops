@@ -47,7 +47,6 @@ export class GitRepository extends pulumi.ComponentResource {
             remoteUri: pulumi.interpolate`https://github.com/${args.githubUsername}/${args.githubRepoName}.git`,
         }, { parent: this });
 
-        // Only exports metadata IDs; the actual secret data remains secure in Secret Manager
         this.registerOutputs({
             repository: this.repository,
         });
