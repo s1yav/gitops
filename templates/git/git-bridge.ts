@@ -109,9 +109,9 @@ export class GitBridge extends pulumi.ComponentResource {
 
         // Only exports metadata IDs; the actual secret data remains secure in Secret Manager
         this.registerOutputs({
-            connectionId: this.connection.id,
-            secretId: this.secret.id,
-            secretVersionId: this.secretVersion.id,
+            connection: this.connection,
+            secret: this.secret,
+            secretVersion: this.secretVersion,
         });
     }
 }

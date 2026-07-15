@@ -1,0 +1,55 @@
+import * as pulumi from "@pulumi/pulumi";
+import * as gcp from "@pulumi/gcp";
+
+export interface GitRepositoryArgs {
+    /**
+     * The GitHub username or organization name.
+     */
+    githubUsername: pulumi.Input<string>;
+
+    /**
+     * The name of the GitHub repository.
+     */
+    githubRepoName: pulumi.Input<string>;
+
+    /**
+     * The resource ID of the parent Cloud Build connection.
+     * (e.g. projects/project-id/locations/location/connections/connection-name)
+     */
+    parentConnection: pulumi.Input<string>;
+
+    /**
+     * The location/region for the repository link.
+     */
+    location: pulumi.Input<string>;
+
+    /**
+     * The name of the repository resource in Google Cloud Build.
+     */
+    repoName: pulumi.Input<string>;
+}
+
+/**
+ * GitRepository Component Resource
+ * Links a GitHub repository to an existing Cloud Build Gen 2 connection.
+ */
+export class GitRepository extends pulumi.ComponentResource {
+    public readonly repository: gcp.cloudbuildv2.Repository;
+
+    constructor(name: string, args: GitRepositoryArgs, opts?: pulumi.ComponentResourceOptions) {
+        super("custom:components:GitRepository", name, args, opts);
+
+        // Link the GitHub repository to the parent Cloud Build Connection
+        this.repository = new gcp.cloudbuildv2.Repository(name, {
+            location: args.location,
+            name: args.repoName,
+            parentConnection: args.parentConnection,
+            remoteUri: pulumi.interpolate`https://github.com/${args.githubUsername}/${args.githubRepoName}.git`,
+        }, { parent: this });
+
+        // Only exports metadata IDs; the actual secret data remains secure in Secret Manager
+        this.registerOutputs({
+            repository: this.repository,
+        });
+    }
+}
