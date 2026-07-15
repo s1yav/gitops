@@ -1,5 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
-import * as gcp from "@pulumi/gcp";
+import * as artifactregistry from "@pulumi/gcp/artifactregistry";
 
 export interface ArtifactRegistryArgs {
     /**
@@ -33,13 +33,13 @@ export interface ArtifactRegistryArgs {
  * Provisions a Google Cloud Artifact Registry repository with custom configuration.
  */
 export class ArtifactRegistry extends pulumi.ComponentResource {
-    public readonly repository: gcp.artifactregistry.Repository;
+    public readonly repository: artifactregistry.Repository;
 
     constructor(name: string, args: ArtifactRegistryArgs, opts?: pulumi.ComponentResourceOptions) {
         super("custom:components:ArtifactRegistry", name, args, opts);
 
         // Create the Artifact Registry repository
-        this.repository = new gcp.artifactregistry.Repository(name, {
+        this.repository = new artifactregistry.Repository(name, {
             location: args.location,
             repositoryId: args.repositoryId,
             description: args.description,
