@@ -13,8 +13,9 @@ fi
 
 echo "🚀 Running pulumi preview for all stacks..."
 for stack in $STACKS; do
+  PROJECT_ID=$(pulumi config get gcp:project --stack "$stack" 2>/dev/null || echo "N/A")
   echo "=================================================="
-  echo "📦 Previewing Stack: $stack"
+  echo "📦 Previewing Stack: $stack (GCP Project: $PROJECT_ID)"
   echo "=================================================="
   
   # Run pulumi preview for the specific stack
