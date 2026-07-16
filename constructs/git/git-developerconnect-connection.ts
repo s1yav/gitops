@@ -80,7 +80,7 @@ export class GitDeveloperconnectConnection extends pulumi.ComponentResource {
                 githubApp: "DEVELOPER_CONNECT",
                 appInstallationId: args.appInstallationId,
                 authorizerCredential: {
-                    oauthTokenSecretVersion: oauthTokenSecretVersion,
+                    oauthTokenSecretVersion,
                 },
             },
         }, { parent: this, dependsOn: [secretPolicyBinding] });

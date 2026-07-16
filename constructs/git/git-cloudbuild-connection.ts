@@ -24,6 +24,11 @@ export interface GitCloudbuildConnectionArgs {
      * The GitHub App Installation ID.
      */
     appInstallationId: pulumi.Input<number>;
+
+    /**
+     * Project ID
+     */
+    projectId: pulumi.Input<string>;
 }
 
 /**
@@ -61,6 +66,13 @@ export class GitCloudbuildConnection extends pulumi.ComponentResource {
             policyData: secretAccessorPolicy.apply(policy => policy.policyData),
         }, { parent: this });
 
+        const oauthTokenSecretVersion = pulumi.all([args.projectId, githubAccessTokenSecret.id]).apply(([proj, id]) => {
+            if (id.startsWith("projects/")) {
+                return `${id}/versions/latest`;
+            }
+            return `projects/${proj}/secrets/${id}/versions/latest`;
+        });
+
         // 4. Create the cloudbuild Gen 2 Connection
         this.connection = new cloudbuildv2.Connection(name, {
             location: args.location,
@@ -68,7 +80,7 @@ export class GitCloudbuildConnection extends pulumi.ComponentResource {
             githubConfig: {
                 appInstallationId: args.appInstallationId,
                 authorizerCredential: {
-                    oauthTokenSecretVersion: pulumi.interpolate`${githubAccessTokenSecret.id}/versions/latest`,
+                    oauthTokenSecretVersion,
                 },
             },
         }, { parent: this, dependsOn: [secretPolicyBinding] });
