@@ -1,5 +1,6 @@
 import * as pulumi from "@pulumi/pulumi";
-import * as artifactregistry from "@pulumi/gcp/artifactregistry";
+import * as gcp from "@pulumi/gcp";
+import * as gcpTypes from "@pulumi/gcp/types";
 
 export interface ArtifactRegistryArgs {
     /**
@@ -24,8 +25,9 @@ export interface ArtifactRegistryArgs {
 
     /**
      * Whether repository tags should be immutable (preventing overwrites).
+     * Only applicable for DOCKER repositories.
      */
-    immutableTags: pulumi.Input<boolean>;
+    immutableTags?: pulumi.Input<boolean>;
 }
 
 /**
@@ -33,20 +35,26 @@ export interface ArtifactRegistryArgs {
  * Provisions a Google Cloud Artifact Registry repository with custom configuration.
  */
 export class ArtifactRegistry extends pulumi.ComponentResource {
-    public readonly repository: artifactregistry.Repository;
+    public readonly repository: gcp.artifactregistry.Repository;
 
     constructor(name: string, args: ArtifactRegistryArgs, opts?: pulumi.ComponentResourceOptions) {
         super("custom:components:ArtifactRegistry", name, args, opts);
 
+        // Build dockerConfig only if the repository format is DOCKER
+        const dockerConfig = pulumi.all([args.format, args.immutableTags]).apply(([format, immutableTags]) => {
+            if (format.toUpperCase() === "DOCKER" && immutableTags !== undefined) {
+                return { immutableTags };
+            }
+            return undefined;
+        });
+
         // Create the Artifact Registry repository
-        this.repository = new artifactregistry.Repository(name, {
+        this.repository = new gcp.artifactregistry.Repository(name, {
             location: args.location,
             repositoryId: args.repositoryId,
             description: args.description,
             format: args.format,
-            dockerConfig: {
-                immutableTags: args.immutableTags,
-            },
+            dockerConfig: dockerConfig as pulumi.Output<gcpTypes.input.artifactregistry.RepositoryDockerConfig>,
         }, { parent: this });
 
         this.registerOutputs({

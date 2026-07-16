@@ -49,11 +49,13 @@ export class GitDeveloperconnectConnection extends pulumi.ComponentResource {
             service: "developerconnect.googleapis.com",
         }, { parent: this });
 
-        // 2. Create a non-destructive single member IAM policy binding for the service account
-        const devconnectServiceMember = new secretmanager.SecretIamMember(`${name}-policy`, {
+        // 2. Create the authoritative IAM policy binding to grant the secretAccessor role to the Developer Connect service agent
+        const secretAccessorBinding = new secretmanager.SecretIamBinding(`${name}-policy-binding`, {
             secretId: githubAccessTokenSecret.secretId,
             role: "roles/secretmanager.secretAccessor",
-            member: devconnectServiceIdentity.member,
+            members: [
+                devconnectServiceIdentity.member,
+            ],
         }, { parent: this });
 
         const oauthTokenSecretVersion = pulumi.all([args.projectId, githubAccessTokenSecret.id]).apply(([proj, id]) => {
@@ -74,7 +76,7 @@ export class GitDeveloperconnectConnection extends pulumi.ComponentResource {
                     oauthTokenSecretVersion,
                 },
             },
-        }, { parent: this, dependsOn: [devconnectServiceMember] });
+        }, { parent: this, dependsOn: [secretAccessorBinding] });
 
         this.registerOutputs({
             connection: this.connection,
