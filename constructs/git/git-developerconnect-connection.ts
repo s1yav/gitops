@@ -50,7 +50,7 @@ export class GitDeveloperconnectConnection extends pulumi.ComponentResource {
         }, { parent: this });
 
         // 2. Create a non-destructive single member IAM policy binding for the service account
-        const secretPolicyBinding = new secretmanager.SecretIamMember(`${name}-policy`, {
+        const devconnectServiceMember = new secretmanager.SecretIamMember(`${name}-policy`, {
             secretId: githubAccessTokenSecret.secretId,
             role: "roles/secretmanager.secretAccessor",
             member: devconnectServiceIdentity.member,
@@ -74,7 +74,7 @@ export class GitDeveloperconnectConnection extends pulumi.ComponentResource {
                     oauthTokenSecretVersion,
                 },
             },
-        }, { parent: this, dependsOn: [secretPolicyBinding] });
+        }, { parent: this, dependsOn: [devconnectServiceMember] });
 
         this.registerOutputs({
             connection: this.connection,

@@ -51,7 +51,7 @@ export class GitCloudbuildConnection extends pulumi.ComponentResource {
         }, { parent: this });
 
         // 2. Create a non-destructive single member IAM policy binding for the service account
-        const secretPolicyBinding = new secretmanager.SecretIamMember(`${name}-policy`, {
+        const legacyCloudbuildServiceMember = new secretmanager.SecretIamMember(`${name}-policy`, {
             secretId: githubAccessTokenSecret.secretId,
             role: "roles/secretmanager.secretAccessor",
             member: cloudbuildServiceIdentity.member,
@@ -63,13 +63,13 @@ export class GitCloudbuildConnection extends pulumi.ComponentResource {
         });
 
         // Construct the second (modern) service identity member: service-PROJECT_NUMBER@gcp-sa-cloudbuild.iam.gserviceaccount.com
-        const serviceAgentMember = project.number.apply(num => `serviceAccount:service-${num}@gcp-sa-cloudbuild.iam.gserviceaccount.com`);
+        const cloudbuildServiceMemberName = project.number.apply(num => `serviceAccount:service-${num}@gcp-sa-cloudbuild.iam.gserviceaccount.com`);
 
         // Create policy binding for the modern service agent
-        const serviceAgentSecretPolicyBinding = new secretmanager.SecretIamMember(`${name}-service-agent-policy`, {
+        const cloudbuildServiceMember = new secretmanager.SecretIamMember(`${name}-service-agent-policy`, {
             secretId: githubAccessTokenSecret.secretId,
             role: "roles/secretmanager.secretAccessor",
-            member: serviceAgentMember,
+            member: cloudbuildServiceMemberName,
         }, { parent: this });
 
         const oauthTokenSecretVersion = pulumi.all([args.projectId, githubAccessTokenSecret.id]).apply(([proj, id]) => {
@@ -89,7 +89,7 @@ export class GitCloudbuildConnection extends pulumi.ComponentResource {
                     oauthTokenSecretVersion,
                 },
             },
-        }, { parent: this, dependsOn: [secretPolicyBinding, serviceAgentSecretPolicyBinding] });
+        }, { parent: this, dependsOn: [legacyCloudbuildServiceMember, cloudbuildServiceMember] });
 
         // Only exports metadata IDs; the actual secret data remains secure in Secret Manager
         this.registerOutputs({
