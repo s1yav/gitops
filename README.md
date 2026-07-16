@@ -36,19 +36,18 @@ pulumi config get gcp:region
 pulumi config get s1yav-github:devconnectid
 ```
 
-### 3. Dry-Run / Preview Planned Changes
-Before mutating any live cloud resources, run a preview to inspect a detailed diff of the planned additions, modifications, or deletions:
+### 3. Dry-Run / Preview All Stacks
+Before mutating any live cloud resources, run the `preview-all-stacks.sh` script to perform a dry-run validation across **all** stacks in the repository:
 ```bash
-# Runs a dry-run and displays the planned infrastructure delta
-pulumi preview
+./preview-all-stacks.sh
 ```
 > [!IMPORTANT]
-> Carefully audit the output. Look for any unintended resource destructions (`- delete`) or unexpected updates (`~ update`).
+> Carefully audit the output of the script. Look for any unintended resource destructions (`- delete`) or unexpected updates (`~ update`) on any of the stacks.
 
-### 4. Deploy the Infrastructure
-Once the preview is verified, execute the deployment:
+### 4. Deploy the Target Stack
+Once the preview is verified for your target environment, execute the deployment:
 ```bash
-# Deploys changes and updates the state
+# Deploys changes to the active stack and updates the state
 pulumi up
 ```
 > [!TIP]
