@@ -10,4 +10,5 @@ export const gitDeveloperconnectConnection = new GitDeveloperconnectConnection("
     location: gcpConfig.require("region"),
     connectionId: "s1yav-GitDeveloperconnectConnection",
     appInstallationId: config.require("devconnectid"),
+    projectId: gcpConfig.require("project"),
 });

@@ -23,6 +23,11 @@ export interface GitDeveloperconnectConnectionArgs {
      * The GitHub App Installation ID.
      */
     appInstallationId: pulumi.Input<string>;
+
+    /**
+     * The GCP Project ID.
+     */
+    projectId: pulumi.Input<string>;
 }
 
 /**
@@ -60,6 +65,13 @@ export class GitDeveloperconnectConnection extends pulumi.ComponentResource {
             policyData: p4saSecretAccessor.apply(policy => policy.policyData),
         }, { parent: this });
 
+        const oauthTokenSecretVersion = pulumi.all([args.projectId, githubAccessTokenSecret.id]).apply(([proj, id]) => {
+            if (id.startsWith("projects/")) {
+                return `${id}/versions/latest`;
+            }
+            return `projects/${proj}/secrets/${id}/versions/latest`;
+        });
+
         // 4. Create the Developer Connect Connection
         this.connection = new developerconnect.Connection(name, {
             location: args.location,
@@ -68,7 +80,7 @@ export class GitDeveloperconnectConnection extends pulumi.ComponentResource {
                 githubApp: "DEVELOPER_CONNECT",
                 appInstallationId: args.appInstallationId,
                 authorizerCredential: {
-                    oauthTokenSecretVersion: pulumi.interpolate`${githubAccessTokenSecret.id}/versions/latest`,
+                    oauthTokenSecretVersion: oauthTokenSecretVersion,
                 },
             },
         }, { parent: this, dependsOn: [secretPolicyBinding] });
