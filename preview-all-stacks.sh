@@ -33,8 +33,19 @@ for stack in $STACKS; do
     for api in "${REQUIRED_APIS[@]}"; do
       status=$(gcloud services list --enabled --filter="config.name=$api" --format="value(config.name)" --project="$PROJECT_ID" 2>/dev/null || echo "")
       if [ -z "$status" ]; then
-        echo "⚡ Enabling API '$api' in project '$PROJECT_ID'..."
-        gcloud services enable "$api" --project="$PROJECT_ID"
+        if [ "$stack" = "dev" ]; then
+          echo "⚡ Enabling API '$api' in project '$PROJECT_ID'..."
+          gcloud services enable "$api" --project="$PROJECT_ID"
+        else
+          echo "❓ API '$api' is disabled in project '$PROJECT_ID' (Stack: $stack)."
+          read -p "   Enable it? [y/N]: " choice < /dev/tty
+          if [[ "$choice" =~ ^[Yy]$ ]]; then
+            echo "⚡ Enabling API '$api' in project '$PROJECT_ID'..."
+            gcloud services enable "$api" --project="$PROJECT_ID"
+          else
+            echo "⚠️ Skipped enabling API '$api'."
+          fi
+        fi
       else
         echo "✅ API '$api' is already enabled."
       fi
