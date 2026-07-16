@@ -49,27 +49,18 @@ export class GitDeveloperconnectConnection extends pulumi.ComponentResource {
             service: "developerconnect.googleapis.com",
         }, { parent: this });
 
-        // 2. Generate the IAM policy allowing Developer Connect to access the secret
-        const p4saSecretAccessor = devconnectServiceIdentity.member.apply(member =>
-            gcp.organizations.getIAMPolicy({
-                bindings: [{
-                    role: "roles/secretmanager.secretAccessor",
-                    members: [member],
-                }],
-            })
-        );
-
-        // 3. Attach the IAM policy to the secret
-        const secretPolicyBinding = new secretmanager.SecretIamPolicy(`${name}-policy`, {
+        // 2. Create a non-destructive single member IAM policy binding for the service account
+        const secretPolicyBinding = new secretmanager.SecretIamMember(`${name}-policy`, {
             secretId: githubAccessTokenSecret.secretId,
-            policyData: p4saSecretAccessor.apply(policy => policy.policyData),
+            role: "roles/secretmanager.secretAccessor",
+            member: devconnectServiceIdentity.member,
         }, { parent: this });
 
         const oauthTokenSecretVersion = pulumi.all([args.projectId, githubAccessTokenSecret.id]).apply(([proj, id]) => {
             if (id.startsWith("projects/")) {
-                return `${id}/versions/latest`;
+                return `${id}/versions/1`;
             }
-            return `projects/${proj}/secrets/${id}/versions/latest`;
+            return `projects/${proj}/secrets/${id}/versions/1`;
         });
 
         // 4. Create the Developer Connect Connection
