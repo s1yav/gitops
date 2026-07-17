@@ -31,6 +31,22 @@ export interface GitDeveloperconnectConnectionArgs {
 }
 
 /**
+ * Helper to grant the Secret Manager Secret Accessor role to a specific member.
+ */
+function grantSecretAccessor(
+    name: string,
+    secretId: pulumi.Input<string>,
+    member: pulumi.Input<string>,
+    parent: pulumi.Resource
+): secretmanager.SecretIamMember {
+    return new secretmanager.SecretIamMember(name, {
+        secretId: secretId,
+        role: "roles/secretmanager.secretAccessor",
+        member: member,
+    }, { parent: parent });
+}
+
+/**
  * GitDeveloperconnectConnection Component Resource
  * Sets up a Developer Connect connection to GitHub, provisions the necessary IAM policy
  * for the Developer Connect service agent to access the GitHub token secret, and links it.
@@ -49,14 +65,13 @@ export class GitDeveloperconnectConnection extends pulumi.ComponentResource {
             service: "developerconnect.googleapis.com",
         }, { parent: this });
 
-        // 2. Create the authoritative IAM policy binding to grant the secretAccessor role to the Developer Connect service agent
-        const secretAccessorBinding = new secretmanager.SecretIamBinding(`${name}-policy-binding`, {
-            secretId: githubAccessTokenSecret.secretId,
-            role: "roles/secretmanager.secretAccessor",
-            members: [
-                devconnectServiceIdentity.member,
-            ],
-        }, { parent: this });
+        // 2. Grant the secretAccessor role to the Developer Connect service agent
+        const secretAccessorMember = grantSecretAccessor(
+            `${name}-policy-member`,
+            githubAccessTokenSecret.secretId,
+            devconnectServiceIdentity.member,
+            this
+        );
 
         const oauthTokenSecretVersion = pulumi.all([args.projectId, githubAccessTokenSecret.id]).apply(([proj, id]) => {
             if (id.startsWith("projects/")) {
@@ -76,7 +91,7 @@ export class GitDeveloperconnectConnection extends pulumi.ComponentResource {
                     oauthTokenSecretVersion,
                 },
             },
-        }, { parent: this, dependsOn: [secretAccessorBinding] });
+        }, { parent: this, dependsOn: [secretAccessorMember] });
 
         this.registerOutputs({
             connection: this.connection,

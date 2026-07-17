@@ -32,6 +32,22 @@ export interface GitCloudbuildConnectionArgs {
 }
 
 /**
+ * Helper to grant the Secret Manager Secret Accessor role to a specific member.
+ */
+function grantSecretAccessor(
+    name: string,
+    secretId: pulumi.Input<string>,
+    member: pulumi.Input<string>,
+    parent: pulumi.Resource
+): secretmanager.SecretIamMember {
+    return new secretmanager.SecretIamMember(name, {
+        secretId: secretId,
+        role: "roles/secretmanager.secretAccessor",
+        member: member,
+    }, { parent: parent });
+}
+
+/**
  * GitCloudbuildConnection Component Resource
  * Provisions a Secret Manager secret with the GitHub token, sets up the IAM permissions for
  * cloudbuild to access it, and creates the cloudbuild Gen 2 connection to GitHub.
@@ -58,15 +74,20 @@ export class GitCloudbuildConnection extends pulumi.ComponentResource {
         // Construct the second (modern) service identity member: service-PROJECT_NUMBER@gcp-sa-cloudbuild.iam.gserviceaccount.com
         const cloudbuildServiceMemberName = project.number.apply(num => `serviceAccount:service-${num}@gcp-sa-cloudbuild.iam.gserviceaccount.com`);
 
-        // 2. Create the authoritative IAM policy binding to grant the secretAccessor role to both service identities
-        const secretAccessorBinding = new secretmanager.SecretIamBinding(`${name}-policy-binding`, {
-            secretId: githubAccessTokenSecret.secretId,
-            role: "roles/secretmanager.secretAccessor",
-            members: [
-                legacyCloudbuildServiceIdentity.member,
-                cloudbuildServiceMemberName,
-            ],
-        }, { parent: this });
+        // 2. Grant the secretAccessor role to both service identities
+        const legacySecretAccessorMember = grantSecretAccessor(
+            `${name}-legacy-policy-member`,
+            githubAccessTokenSecret.secretId,
+            legacyCloudbuildServiceIdentity.member,
+            this
+        );
+
+        const modernSecretAccessorMember = grantSecretAccessor(
+            `${name}-modern-policy-member`,
+            githubAccessTokenSecret.secretId,
+            cloudbuildServiceMemberName,
+            this
+        );
 
         const oauthTokenSecretVersion = pulumi.all([args.projectId, githubAccessTokenSecret.id]).apply(([proj, id]) => {
             if (id.startsWith("projects/")) {
@@ -85,7 +106,7 @@ export class GitCloudbuildConnection extends pulumi.ComponentResource {
                     oauthTokenSecretVersion,
                 },
             },
-        }, { parent: this, dependsOn: [secretAccessorBinding] });
+        }, { parent: this, dependsOn: [legacySecretAccessorMember, modernSecretAccessorMember] });
 
         // Only exports metadata IDs; the actual secret data remains secure in Secret Manager
         this.registerOutputs({
