@@ -54,6 +54,23 @@ export interface CloudbuildRepositoryTriggerArgs {
 }
 
 /**
+ * Resolves the service account used for trigger execution.
+ * If a custom service account is provided, it is formatted to the full GCP resource name path.
+ * If not provided, the default Cloud Build service account is constructed from the project number.
+ */
+function resolveServiceAccount(projectId: pulumi.Input<string>, serviceAccount?: pulumi.Input<string>): pulumi.Output<string> {
+    const project = gcp.organizations.getProjectOutput({
+        projectId: projectId,
+    });
+    const defaultServiceAccount = project.number.apply(num => `projects/${projectId}/serviceAccounts/${num}@cloudbuild.gserviceaccount.com`);
+
+    if (serviceAccount !== undefined) {
+        return pulumi.interpolate`projects/${projectId}/serviceAccounts/${serviceAccount}`;
+    }
+    return defaultServiceAccount;
+}
+
+/**
  * CloudbuildRepositoryTrigger Component Resource
  * Provisions a Google Cloud Build trigger linked to GitHub repository push events.
  */
@@ -63,18 +80,8 @@ export class CloudbuildRepositoryTrigger extends pulumi.ComponentResource {
     constructor(name: string, args: CloudbuildRepositoryTriggerArgs, opts?: pulumi.ComponentResourceOptions) {
         super("custom:components:CloudbuildRepositoryTrigger", name, args, opts);
 
-        // Get the project details to retrieve the project number
-        const project = gcp.organizations.getProjectOutput({
-            projectId: args.projectId,
-        });
-
-        // Construct the default service account: projects/PROJECT_ID/serviceAccounts/PROJECT_NUMBER@cloudbuild.gserviceaccount.com
-        const defaultServiceAccount = project.number.apply(num => `projects/${args.projectId}/serviceAccounts/${num}@cloudbuild.gserviceaccount.com`);
-
-        // Format the service account into a fully qualified resource name required by GCP if an email is provided
-        const serviceAccount = args.serviceAccount !== undefined
-            ? pulumi.interpolate`projects/${args.projectId}/serviceAccounts/${args.serviceAccount}`
-            : defaultServiceAccount;
+        // Resolve the service account to be used for the trigger execution
+        const serviceAccount = resolveServiceAccount(args.projectId, args.serviceAccount);
 
         // Create the Cloud Build trigger linked to repository push events
         this.trigger = new cloudbuild.Trigger(name, {
