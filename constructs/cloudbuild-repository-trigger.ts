@@ -63,6 +63,19 @@ export class CloudbuildRepositoryTrigger extends pulumi.ComponentResource {
     constructor(name: string, args: CloudbuildRepositoryTriggerArgs, opts?: pulumi.ComponentResourceOptions) {
         super("custom:components:CloudbuildRepositoryTrigger", name, args, opts);
 
+        // Get the project details to retrieve the project number
+        const project = gcp.organizations.getProjectOutput({
+            projectId: args.projectId,
+        });
+
+        // Construct the default service account: projects/PROJECT_ID/serviceAccounts/PROJECT_NUMBER@cloudbuild.gserviceaccount.com
+        const defaultServiceAccount = project.number.apply(num => `projects/${args.projectId}/serviceAccounts/${num}@cloudbuild.gserviceaccount.com`);
+
+        // Format the service account into a fully qualified resource name required by GCP if an email is provided
+        const serviceAccount = args.serviceAccount !== undefined
+            ? pulumi.interpolate`projects/${args.projectId}/serviceAccounts/${args.serviceAccount}`
+            : defaultServiceAccount;
+
         // Create the Cloud Build trigger linked to repository push events
         this.trigger = new cloudbuild.Trigger(name, {
             location: args.location,
@@ -72,7 +85,7 @@ export class CloudbuildRepositoryTrigger extends pulumi.ComponentResource {
                 pullRequest: args.pullRequest,
             },
             filename: args.filename,
-            serviceAccount: args.serviceAccount,
+            serviceAccount: serviceAccount,
             substitutions: args.substitutions,
         }, { parent: this });
 
