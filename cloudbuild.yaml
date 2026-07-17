@@ -14,12 +14,12 @@ steps:
 # Retrieve the Pulumi Access Token from GCP Secret Manager
 availableSecrets:
   secretManager:
-    - versionName: 'projects/$PROJECT_ID/secrets/$_PULUMI_ACCESS_TOKEN_SECRET_NAME/versions/latest'
+    - versionName: 'projects/$PROJECT_ID/secrets/$_PULUMI_ACCESS_TOKEN_ID/versions/latest'
       env: 'PULUMI_ACCESS_TOKEN'
 
 substitutions:
   # Default Secret Manager name for the Pulumi Access Token
-  _PULUMI_ACCESS_TOKEN_SECRET_NAME: 'pulumi-access-token'
+  _PULUMI_ACCESS_TOKEN_ID: 'pulumi-access-token'
 
 options:
   # Log directly to Cloud Logging

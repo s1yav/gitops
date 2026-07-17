@@ -23,4 +23,7 @@ export const gitopsMainTrigger = new CloudbuildRepositoryTrigger("gitops-main-tr
     push: {
         branch: "^main$",
     },
+    substitutions: {
+        _PULUMI_ACCESS_TOKEN_ID: "pulumi-access-token",
+    },
 });
