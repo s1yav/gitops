@@ -15,6 +15,7 @@ export const gitopsRepository = new GitCloudbuildRepository("gitops-repository",
 });
 
 export const gitopsMainTrigger = new CloudbuildRepositoryTrigger("gitops-main-trigger", {
+    projectId: gcpConfig.require("project"),
     location: gcpConfig.require("region"),
     repository: gitopsRepository.repository.id,
     branchFilter: "^main$",

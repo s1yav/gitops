@@ -15,6 +15,7 @@ export const promptEngineRepository = new GitCloudbuildRepository("prompt-engine
 });
 
 export const promptEngineMainTrigger = new CloudbuildRepositoryTrigger("prompt-engine-main-trigger", {
+    projectId: gcpConfig.require("project"),
     location: gcpConfig.require("region"),
     repository: promptEngineRepository.repository.id,
     branchFilter: "^main$",

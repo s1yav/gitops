@@ -15,6 +15,7 @@ export const sriyavFirebasehostRepository = new GitCloudbuildRepository("sriyav-
 });
 
 export const sriyavFirebasehostMainTrigger = new CloudbuildRepositoryTrigger("sriyav-firebasehost-main-trigger", {
+    projectId: gcpConfig.require("project"),
     location: gcpConfig.require("region"),
     repository: sriyavFirebasehostRepository.repository.id,
     branchFilter: "^main$",

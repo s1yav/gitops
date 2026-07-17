@@ -15,6 +15,7 @@ export const modelcontextprotocolSuiteRepository = new GitCloudbuildRepository("
 });
 
 export const modelcontextprotocolSuiteMainTrigger = new CloudbuildRepositoryTrigger("modelcontextprotocol-suite-main-trigger", {
+    projectId: gcpConfig.require("project"),
     location: gcpConfig.require("region"),
     repository: modelcontextprotocolSuiteRepository.repository.id,
     branchFilter: "^main$",

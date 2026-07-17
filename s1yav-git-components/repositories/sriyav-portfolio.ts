@@ -15,6 +15,7 @@ export const sriyavPortfolioRepository = new GitCloudbuildRepository("sriyav-por
 });
 
 export const sriyavPortfolioMainTrigger = new CloudbuildRepositoryTrigger("sriyav-portfolio-main-trigger", {
+    projectId: gcpConfig.require("project"),
     location: gcpConfig.require("region"),
     repository: sriyavPortfolioRepository.repository.id,
     branchFilter: "^main$",

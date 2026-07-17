@@ -15,6 +15,7 @@ export const aiPairProgrammingLogRepository = new GitCloudbuildRepository("ai-pa
 });
 
 export const aiPairProgrammingLogMainTrigger = new CloudbuildRepositoryTrigger("ai-pair-programming-log-main-trigger", {
+    projectId: gcpConfig.require("project"),
     location: gcpConfig.require("region"),
     repository: aiPairProgrammingLogRepository.repository.id,
     branchFilter: "^main$",
