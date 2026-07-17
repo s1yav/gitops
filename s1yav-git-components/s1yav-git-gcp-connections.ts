@@ -5,7 +5,7 @@ const gcpConfig = new pulumi.Config("gcp");
 const gitConfig = new pulumi.Config("s1yav-git");
 
 // Instantiate the custom GitCloudbuildConnection component resource
-export const gitCloudbuildConnection = new GitCloudbuildConnection("s1yav-GitCloudbuildConnection", {
+export const s1yavGitCloudbuildConnection = new GitCloudbuildConnection("s1yav-GitCloudbuildConnection", {
     githubAccessTokenId: "github-access-token",
     location: gcpConfig.require("region"),
     connectionName: "s1yav-git-cloudbuild-connection",
