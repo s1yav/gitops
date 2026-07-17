@@ -1,5 +1,6 @@
 import * as pulumi from "@pulumi/pulumi";
 import { GitCloudbuildRepository } from "../../constructs/git/git-cloudbuild-repository";
+import { CloudbuildRepositoryTrigger } from "../../constructs/cloudbuild-repository-trigger";
 import { s1yavGitCloudbuildConnection } from "../s1yav-git-gcp-connections";
 
 const gcpConfig = new pulumi.Config("gcp");
@@ -11,4 +12,14 @@ export const modelcontextprotocolSuiteRepository = new GitCloudbuildRepository("
     parentConnection: s1yavGitCloudbuildConnection.connection.id,
     location: gcpConfig.require("region"),
     repoName: "modelcontextprotocol-suite",
+});
+
+export const modelcontextprotocolSuiteMainTrigger = new CloudbuildRepositoryTrigger("modelcontextprotocol-suite-main-trigger", {
+    location: gcpConfig.require("region"),
+    repository: modelcontextprotocolSuiteRepository.repository.id,
+    branchFilter: "^main$",
+    filename: "cloudbuild.yaml",
+    push: {
+        branch: "^main$",
+    },
 });
