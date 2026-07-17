@@ -14,13 +14,13 @@ export const modelcontextprotocolSuiteRepository = new GitCloudbuildRepository("
     repoName: "modelcontextprotocol-suite",
 });
 
-export const modelcontextprotocolSuiteMainTrigger = new CloudbuildRepositoryTrigger("modelcontextprotocol-suite-main-trigger", {
-    projectId: gcpConfig.require("project"),
-    location: gcpConfig.require("region"),
-    repository: modelcontextprotocolSuiteRepository.repository.id,
-    branchFilter: "^main$",
-    filename: "cloudbuild.yaml",
-    push: {
-        branch: "^main$",
-    },
-});
+// export const modelcontextprotocolSuiteMainTrigger = new CloudbuildRepositoryTrigger("modelcontextprotocol-suite-main-trigger", {
+//     projectId: gcpConfig.require("project"),
+//     location: gcpConfig.require("region"),
+//     repository: modelcontextprotocolSuiteRepository.repository.id,
+//     branchFilter: "^main$",
+//     filename: "cloudbuild.yaml",
+//     push: {
+//         branch: "^main$",
+//     },
+// });

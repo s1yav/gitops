@@ -14,13 +14,13 @@ export const aiPairProgrammingLogRepository = new GitCloudbuildRepository("ai-pa
     repoName: "ai-pair-programming-log",
 });
 
-export const aiPairProgrammingLogMainTrigger = new CloudbuildRepositoryTrigger("ai-pair-programming-log-main-trigger", {
-    projectId: gcpConfig.require("project"),
-    location: gcpConfig.require("region"),
-    repository: aiPairProgrammingLogRepository.repository.id,
-    branchFilter: "^main$",
-    filename: "cloudbuild.yaml",
-    push: {
-        branch: "^main$",
-    },
-});
+// export const aiPairProgrammingLogMainTrigger = new CloudbuildRepositoryTrigger("ai-pair-programming-log-main-trigger", {
+//     projectId: gcpConfig.require("project"),
+//     location: gcpConfig.require("region"),
+//     repository: aiPairProgrammingLogRepository.repository.id,
+//     branchFilter: "^main$",
+//     filename: "cloudbuild.yaml",
+//     push: {
+//         branch: "^main$",
+//     },
+// });

@@ -14,13 +14,13 @@ export const promptEngineRepository = new GitCloudbuildRepository("prompt-engine
     repoName: "prompt-engine",
 });
 
-export const promptEngineMainTrigger = new CloudbuildRepositoryTrigger("prompt-engine-main-trigger", {
-    projectId: gcpConfig.require("project"),
-    location: gcpConfig.require("region"),
-    repository: promptEngineRepository.repository.id,
-    branchFilter: "^main$",
-    filename: "cloudbuild.yaml",
-    push: {
-        branch: "^main$",
-    },
-});
+// export const promptEngineMainTrigger = new CloudbuildRepositoryTrigger("prompt-engine-main-trigger", {
+//     projectId: gcpConfig.require("project"),
+//     location: gcpConfig.require("region"),
+//     repository: promptEngineRepository.repository.id,
+//     branchFilter: "^main$",
+//     filename: "cloudbuild.yaml",
+//     push: {
+//         branch: "^main$",
+//     },
+// });
