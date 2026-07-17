@@ -45,6 +45,12 @@ export interface CloudbuildRepositoryTriggerArgs {
      * If not provided, the default service account is constructed using the projectId.
      */
     serviceAccount?: pulumi.Input<string>;
+
+    /**
+     * Map of user-defined substitutions for the trigger.
+     * Keys must start with an underscore (e.g. "_ARTIFACT_REGISTRY_NAME").
+     */
+    substitutions?: pulumi.Input<{ [key: string]: pulumi.Input<string> }>;
 }
 
 /**
@@ -85,6 +91,7 @@ export class CloudbuildRepositoryTrigger extends pulumi.ComponentResource {
             },
             filename: args.filename,
             serviceAccount: serviceAccount,
+            substitutions: args.substitutions,
         }, { parent: this });
 
         this.registerOutputs({
