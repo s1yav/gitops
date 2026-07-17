@@ -2,7 +2,7 @@ import * as pulumi from "@pulumi/pulumi";
 import { GitCloudbuildRepository } from "../../constructs/git/git-cloudbuild-repository";
 import { CloudbuildRepositoryTrigger } from "../../constructs/cloudbuild-repository-trigger";
 import { s1yavGitCloudbuildConnection } from "../s1yav-git-gcp-connections";
-import { s1yavDockerArtifactRegistry } from "../s1yav-artifact-registry";
+import { s1yavDockerArtifactRegistry } from "../s1yav-artifactregistry";
 
 const gcpConfig = new pulumi.Config("gcp");
 const githubConfig = new pulumi.Config("s1yav-github");
@@ -25,6 +25,6 @@ export const sriyavPortfolioMainTrigger = new CloudbuildRepositoryTrigger("sriya
         branch: "^main$",
     },
     substitutions: {
-        _ARTIFACT_REGISTRY_NAME: s1yavDockerArtifactRegistry.repository.repositoryId,
+        _ARTIFACTREGISTRY_NAME: s1yavDockerArtifactRegistry.repository.repositoryId,
     },
 });
