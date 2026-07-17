@@ -1,5 +1,23 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as cloudbuildv2 from "@pulumi/gcp/cloudbuildv2";
+import * as secretmanager from "@pulumi/gcp/secretmanager";
+
+/**
+ * Helper to grant the Secret Manager Secret Accessor role to a specific member.
+ */
+export function grantPulumiAccessTokenSecretAccessor(
+    name: string,
+    secretId: pulumi.Input<string>,
+    member: pulumi.Input<string>,
+    parent: pulumi.Resource
+): secretmanager.SecretIamMember {
+    const pulumiAccessTokenSecret = secretmanager.Secret.get(`${name}-access-token`, secretId, {}, { parent: parent });
+    return new secretmanager.SecretIamMember(name, {
+        secretId: pulumiAccessTokenSecret.secretId,
+        role: "roles/secretmanager.secretAccessor",
+        member: member,
+    }, { parent: parent });
+}
 
 export interface GitCloudbuildRepositoryArgs {
     /**
