@@ -4,3 +4,4 @@ config:
   gcp:region: us-central1
   s1yav-git:cloudbuild-id:
     secure: AAABAOfL1zAz0/65EWa7L1wqRWF6XLzeJQ8EETjdgTsA6wcgZ6uPGJ0=
+  s1yav-github:username: s1yav
