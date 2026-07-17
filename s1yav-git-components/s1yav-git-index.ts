@@ -1,5 +1,6 @@
+import "./s1yav-serviceaccounts";
 import "./s1yav-git-gcp-connections";
-import "./s1yav-artifact-registry";
+import "./s1yav-artifactregistry";
 import "./repositories/sriyav-firebasehost";
 import "./repositories/sriyav-portfolio";
 import "./repositories/gitops";
