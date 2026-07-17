@@ -1,5 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
-import { DockerArtifactRegistry } from "../constructs/artifact-registry/docker-artifact-registry";
+import { DockerArtifactRegistry } from "../constructs/artifactregistry/docker-artifactregistry";
 
 const gcpConfig = new pulumi.Config("gcp");
 
