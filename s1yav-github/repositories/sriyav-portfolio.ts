@@ -5,7 +5,7 @@ import { s1yavConnectionGithub } from "../settings/installations/connection-gith
 import { s1yavRepositoryDocker } from "../repository-docker";
 import { s1yavCloudbuildServiceAccount } from "../cloudbuild-serviceaccount";
 
-import { gcpConfig, githubConfig } from "../configuration";
+import { gcpConfig, githubConfig, stackName } from "../configuration";
 
 export const sriyavPortfolioRepositoryGit = new RepositoryGithub("sriyav-portfolio-repository", {
     githubUsername: githubConfig.require("username"),
@@ -28,5 +28,6 @@ export const sriyavPortfolioMainTrigger = new Trigger("sriyav-portfolio-main-tri
     substitutions: {
         _ARTIFACTREGISTRY_NAME: s1yavRepositoryDocker.repository.repositoryId,
         _GITHUB_ACCESS_TOKEN_ID: githubConfig.require("tokenId"),
+        _STACK_NAME: stackName,
     },
 });
