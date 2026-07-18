@@ -21,6 +21,16 @@ export interface RepositoryDockerArgs {
      * Whether repository tags should be immutable (preventing overwrites).
      */
     immutableTags?: pulumi.Input<boolean>;
+
+    /**
+     * Whether the cleanup policy is enabled in dry-run mode for the repository.
+     */
+    cleanupPolicyDryRun?: pulumi.Input<boolean>;
+
+    /**
+     * Cleanup policies for this repository indicating when package versions can be deleted.
+     */
+    cleanupPolicies?: pulumi.Input<pulumi.Input<gcp.types.input.artifactregistry.RepositoryCleanupPolicy>[]>;
 }
 
 /**
