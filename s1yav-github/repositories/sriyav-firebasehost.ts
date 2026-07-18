@@ -17,13 +17,6 @@ export const sriyavFirebasehostRepositoryGit = new RepositoryGithub(`${repoName}
     repoName: repoName,
 });
 
-// Grant Secret Accessor permission to the Cloud Build service account for the Pulumi token
-export const pulumiTokenAccessor = new gcp.secretmanager.SecretIamMember(`${repoName}-pulumi-token-accessor`, {
-    secretId: pulumiConfig.requireSecret("tokenId"),
-    role: "roles/secretmanager.secretAccessor",
-    member: s1yavCloudbuildServiceAccount.account.email.apply(email => `serviceAccount:${email}`),
-});
-
 export const sriyavFirebasehostMainTrigger = new Trigger(`${repoName}-main-trigger`, {
     projectId: gcpConfig.require("project"),
     location: gcpConfig.require("region"),
