@@ -13,7 +13,7 @@ export const s1yavCloudbuildServiceAccount = new Account(`${stackName}-cloudbuil
     description: "User-managed service account for executing Cloud Build triggers",
 });
 
-// owner iammember
+// Grant Owner permission to the Cloud Build service account
 export const s1yavCloudbuildServiceAccountOwner = new gcp.projects.IAMMember(`${stackName}-cloudbuild-sa-owner`, {
     project: projectId,
     role: "roles/owner",
