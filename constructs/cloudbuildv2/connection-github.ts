@@ -57,9 +57,6 @@ export class ConnectionGithub extends pulumi.ComponentResource {
     constructor(name: string, args: ConnectionGithubArgs, opts?: pulumi.ComponentResourceOptions) {
         super("custom:components:ConnectionGithub", name, args, opts);
 
-        // Get the existing Secret resource using its ID/Path
-        const githubAccessTokenSecret = secretmanager.Secret.get(`${name}-access-token`, args.githubAccessTokenId, {}, { parent: this });
-
         // 1. Get/Create the Cloud Build Service Identity
         const legacyCloudbuildServiceIdentity = new gcp.projects.ServiceIdentity(`${name}-identity`, {
             service: "cloudbuild.googleapis.com",
@@ -76,19 +73,19 @@ export class ConnectionGithub extends pulumi.ComponentResource {
         // 2. Grant the secretAccessor role to both service identities
         const legacySecretAccessorMember = grantSecretAccessor(
             `${name}-legacy-policy-member`,
-            githubAccessTokenSecret.secretId,
+            args.githubAccessTokenId,
             legacyCloudbuildServiceIdentity.member,
             this
         );
 
         const modernSecretAccessorMember = grantSecretAccessor(
             `${name}-modern-policy-member`,
-            githubAccessTokenSecret.secretId,
+            args.githubAccessTokenId,
             cloudbuildServiceMemberName,
             this
         );
 
-        const oauthTokenSecretVersion = pulumi.all([args.projectId, githubAccessTokenSecret.id]).apply(([proj, id]) => {
+        const oauthTokenSecretVersion = pulumi.all([args.projectId, args.githubAccessTokenId]).apply(([proj, id]) => {
             if (id.startsWith("projects/")) {
                 return `${id}/versions/1`;
             }
