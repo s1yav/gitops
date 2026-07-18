@@ -42,9 +42,8 @@ export interface TriggerArgs {
     /**
      * The service account used for trigger execution.
      * Must be a user-managed service account (e.g. name@project.iam.gserviceaccount.com).
-     * If not provided, it is left unset to let Cloud Build select the default service account.
      */
-    serviceAccount?: pulumi.Input<string>;
+    serviceAccount: pulumi.Input<string>;
 
     /**
      * Map of user-defined substitutions for the trigger.
@@ -55,19 +54,10 @@ export interface TriggerArgs {
 
 /**
  * Resolves the service account used for trigger execution.
- * If a custom service account is provided, it is formatted to the full GCP resource name path.
- * If not provided, the default Cloud Build service account is constructed from the project number.
+ * Formats the provided service account ID to the full GCP resource name path.
  */
-function resolveServiceAccount(projectId: pulumi.Input<string>, serviceAccount?: pulumi.Input<string>): pulumi.Output<string> {
-    const project = gcp.organizations.getProjectOutput({
-        projectId: projectId,
-    });
-    const defaultServiceAccount = project.number.apply(num => `projects/${projectId}/serviceAccounts/${num}@cloudbuild.gserviceaccount.com`);
-
-    if (serviceAccount !== undefined) {
-        return pulumi.interpolate`projects/${projectId}/serviceAccounts/${serviceAccount}`;
-    }
-    return defaultServiceAccount;
+function resolveServiceAccount(projectId: pulumi.Input<string>, serviceAccount: pulumi.Input<string>): pulumi.Output<string> {
+    return pulumi.interpolate`projects/${projectId}/serviceAccounts/${serviceAccount}`;
 }
 
 /**

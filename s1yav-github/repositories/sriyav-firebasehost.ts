@@ -2,6 +2,7 @@ import * as pulumi from "@pulumi/pulumi";
 import { RepositoryGithub } from "../../constructs/cloudbuildv2/repository-github";
 import { Trigger } from "../../constructs/cloudbuild/trigger";
 import { s1yavConnectionGithub } from "../settings/installations/connection-github";
+import { s1yavCloudbuildServiceAccount } from "../cloudbuild-serviceaccount";
 
 import { gcpConfig, githubConfig, pulumiConfig } from "../configuration";
 
@@ -19,7 +20,7 @@ export const sriyavFirebasehostMainTrigger = new Trigger("sriyav-firebasehost-ma
     repository: sriyavFirebasehostRepositoryGit.repository.id,
     branchFilter: "^main$",
     filename: "cloudbuild.yaml",
-    serviceAccount: `s1yav-cloudbuild-sa@${gcpConfig.require("project")}.iam.gserviceaccount.com`,
+    serviceAccount: s1yavCloudbuildServiceAccount.account.email,
     push: {
         branch: "^main$",
     },

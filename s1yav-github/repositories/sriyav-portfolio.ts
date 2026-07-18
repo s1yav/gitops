@@ -3,6 +3,7 @@ import { RepositoryGithub } from "../../constructs/cloudbuildv2/repository-githu
 import { Trigger } from "../../constructs/cloudbuild/trigger";
 import { s1yavConnectionGithub } from "../settings/installations/connection-github";
 import { s1yavRepositoryDocker } from "../repository-docker";
+import { s1yavCloudbuildServiceAccount } from "../cloudbuild-serviceaccount";
 
 import { gcpConfig, githubConfig } from "../configuration";
 
@@ -20,7 +21,7 @@ export const sriyavPortfolioMainTrigger = new Trigger("sriyav-portfolio-main-tri
     repository: sriyavPortfolioRepositoryGit.repository.id,
     branchFilter: "^main$",
     filename: "cloudbuild.yaml",
-    serviceAccount: `s1yav-cloudbuild-sa@${gcpConfig.require("project")}.iam.gserviceaccount.com`,
+    serviceAccount: s1yavCloudbuildServiceAccount.account.email,
     push: {
         branch: "^main$",
     },
