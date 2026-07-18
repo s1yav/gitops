@@ -13,28 +13,16 @@ export const s1yavCloudbuildServiceAccount = new Account(`${stackName}-cloudbuil
     description: "User-managed service account for executing Cloud Build triggers",
 });
 
-// Get the existing Pulumi access token Secret resource
-const pulumiAccessTokenSecret = gcp.secretmanager.Secret.get(
-    `${stackName}-pulumi-access-token`,
-    pulumiConfig.requireSecret("tokenId")
-);
-
 // Grant Secret Accessor permission to the Cloud Build service account for the Pulumi token
 export const pulumiTokenAccessor = new gcp.secretmanager.SecretIamMember(`${stackName}-pulumi-token-accessor`, {
-    secretId: pulumiAccessTokenSecret.id,
+    secretId: pulumiConfig.requireSecret("tokenId"),
     role: "roles/secretmanager.secretAccessor",
     member: s1yavCloudbuildServiceAccount.account.email.apply(email => `serviceAccount:${email}`),
 });
 
-// Get the existing GitHub access token Secret resource
-const githubAccessTokenSecret = gcp.secretmanager.Secret.get(
-    `${stackName}-github-access-token`,
-    githubConfig.requireSecret("tokenId")
-);
-
 // Grant Secret Accessor permission to the Cloud Build service account for the GitHub token
 export const githubTokenAccessor = new gcp.secretmanager.SecretIamMember(`${stackName}-github-token-accessor`, {
-    secretId: githubAccessTokenSecret.id,
+    secretId: githubConfig.requireSecret("tokenId"),
     role: "roles/secretmanager.secretAccessor",
     member: s1yavCloudbuildServiceAccount.account.email.apply(email => `serviceAccount:${email}`),
 });
