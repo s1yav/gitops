@@ -7,6 +7,7 @@ steps:
       - '-c'
       - |
         npm ci
+        pulumi refresh --yes --stack $_STACK_NAME --non-interactive
         pulumi up --yes --stack $_STACK_NAME --non-interactive
     secretEnv:
       - 'PULUMI_ACCESS_TOKEN'
