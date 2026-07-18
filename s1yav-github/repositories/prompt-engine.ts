@@ -5,21 +5,23 @@ import { s1yavConnectionGithub } from "../settings/installations/connection-gith
 
 import { gcpConfig, githubConfig } from "../configuration";
 
-export const promptEngineRepositoryGit = new RepositoryGithub("prompt-engine-repository", {
+const repoName = "prompt-engine";
+
+export const promptEngineRepositoryGit = new RepositoryGithub(`${repoName}-repository`, {
     githubUsername: githubConfig.require("username"),
-    githubRepoName: "prompt-engine",
+    githubRepoName: repoName,
     parentConnection: s1yavConnectionGithub.connection.id,
     location: gcpConfig.require("region"),
-    repoName: "prompt-engine",
+    repoName: repoName,
 });
 
-// export const promptEngineMainTrigger = new Trigger("prompt-engine-main-trigger", {
+// export const promptEngineMainTrigger = new Trigger(`${repoName}-main-trigger`, {
 //     projectId: gcpConfig.require("project"),
 //     location: gcpConfig.require("region"),
 //     repository: promptEngineRepositoryGit.repository.id,
 //     branchFilter: "^main$",
 //     filename: "cloudbuild.yaml",
-//     serviceAccount: s1yavCloudbuildAccount.account.email,
+//     serviceAccount: s1yavCloudbuildServiceAccount.account.email,
 //     push: {
 //         branch: "^main$",
 //     },

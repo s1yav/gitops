@@ -7,15 +7,17 @@ import { s1yavCloudbuildServiceAccount } from "../cloudbuild-serviceaccount";
 
 import { gcpConfig, githubConfig } from "../configuration";
 
-export const sriyavPortfolioRepositoryGit = new RepositoryGithub("sriyav-portfolio-repository", {
+const repoName = "sriyav-portfolio";
+
+export const sriyavPortfolioRepositoryGit = new RepositoryGithub(`${repoName}-repository`, {
     githubUsername: githubConfig.require("username"),
-    githubRepoName: "sriyav-portfolio",
+    githubRepoName: repoName,
     parentConnection: s1yavConnectionGithub.connection.id,
     location: gcpConfig.require("region"),
-    repoName: "sriyav-portfolio",
+    repoName: repoName,
 });
 
-export const sriyavPortfolioMainTrigger = new Trigger("sriyav-portfolio-main-trigger", {
+export const sriyavPortfolioMainTrigger = new Trigger(`${repoName}-main-trigger`, {
     projectId: gcpConfig.require("project"),
     location: gcpConfig.require("region"),
     repository: sriyavPortfolioRepositoryGit.repository.id,

@@ -5,21 +5,23 @@ import { s1yavConnectionGithub } from "../settings/installations/connection-gith
 
 import { gcpConfig, githubConfig } from "../configuration";
 
-export const aiPairProgrammingLogRepositoryGit = new RepositoryGithub("ai-pair-programming-log-repository", {
+const repoName = "ai-pair-programming-log";
+
+export const aiPairProgrammingLogRepositoryGit = new RepositoryGithub(`${repoName}-repository`, {
     githubUsername: githubConfig.require("username"),
-    githubRepoName: "ai-pair-programming-log",
+    githubRepoName: repoName,
     parentConnection: s1yavConnectionGithub.connection.id,
     location: gcpConfig.require("region"),
-    repoName: "ai-pair-programming-log",
+    repoName: repoName,
 });
 
-// export const aiPairProgrammingLogMainTrigger = new Trigger("ai-pair-programming-log-main-trigger", {
+// export const aiPairProgrammingLogMainTrigger = new Trigger(`${repoName}-main-trigger`, {
 //     projectId: gcpConfig.require("project"),
 //     location: gcpConfig.require("region"),
 //     repository: aiPairProgrammingLogRepositoryGit.repository.id,
 //     branchFilter: "^main$",
 //     filename: "cloudbuild.yaml",
-//     serviceAccount: s1yavCloudbuildAccount.account.email,
+//     serviceAccount: s1yavCloudbuildServiceAccount.account.email,
 //     push: {
 //         branch: "^main$",
 //     },

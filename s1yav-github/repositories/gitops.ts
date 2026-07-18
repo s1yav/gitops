@@ -6,15 +6,17 @@ import { s1yavCloudbuildServiceAccount } from "../cloudbuild-serviceaccount";
 
 import { gcpConfig, githubConfig, pulumiConfig, stackName } from "../configuration";
 
-export const gitopsRepositoryGit = new RepositoryGithub("gitops-repository", {
+const repoName = "gitops";
+
+export const gitopsRepositoryGit = new RepositoryGithub(`${repoName}-repository`, {
     githubUsername: githubConfig.require("username"),
-    githubRepoName: "gitops",
+    githubRepoName: repoName,
     parentConnection: s1yavConnectionGithub.connection.id,
     location: gcpConfig.require("region"),
-    repoName: "gitops",
+    repoName: repoName,
 });
 
-export const gitopsMainTrigger = new Trigger("gitops-main-trigger", {
+export const gitopsMainTrigger = new Trigger(`${repoName}-main-trigger`, {
     projectId: gcpConfig.require("project"),
     location: gcpConfig.require("region"),
     repository: gitopsRepositoryGit.repository.id,

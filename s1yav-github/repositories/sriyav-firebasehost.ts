@@ -1,4 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
+import * as gcp from "@pulumi/gcp";
 import { RepositoryGithub } from "../../constructs/cloudbuildv2/repository-github";
 import { Trigger } from "../../constructs/cloudbuild/trigger";
 import { s1yavConnectionGithub } from "../settings/installations/connection-github";
@@ -6,15 +7,24 @@ import { s1yavCloudbuildServiceAccount } from "../cloudbuild-serviceaccount";
 
 import { gcpConfig, githubConfig, pulumiConfig } from "../configuration";
 
-export const sriyavFirebasehostRepositoryGit = new RepositoryGithub("sriyav-firebasehost-repository", {
+const repoName = "sriyav-firebasehost";
+
+export const sriyavFirebasehostRepositoryGit = new RepositoryGithub(`${repoName}-repository`, {
     githubUsername: githubConfig.require("username"),
-    githubRepoName: "sriyav-firebasehost",
+    githubRepoName: repoName,
     parentConnection: s1yavConnectionGithub.connection.id,
     location: gcpConfig.require("region"),
-    repoName: "sriyav-firebasehost",
+    repoName: repoName,
 });
 
-export const sriyavFirebasehostMainTrigger = new Trigger("sriyav-firebasehost-main-trigger", {
+// Grant Secret Accessor permission to the Cloud Build service account for the Pulumi token
+export const pulumiTokenAccessor = new gcp.secretmanager.SecretIamMember(`${repoName}-pulumi-token-accessor`, {
+    secretId: pulumiConfig.requireSecret("tokenId"),
+    role: "roles/secretmanager.secretAccessor",
+    member: s1yavCloudbuildServiceAccount.account.email.apply(email => `serviceAccount:${email}`),
+});
+
+export const sriyavFirebasehostMainTrigger = new Trigger(`${repoName}-main-trigger`, {
     projectId: gcpConfig.require("project"),
     location: gcpConfig.require("region"),
     repository: sriyavFirebasehostRepositoryGit.repository.id,
