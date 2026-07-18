@@ -52,6 +52,8 @@ export class RepositoryDocker extends pulumi.ComponentResource {
             dockerConfig: {
                 immutableTags: args.immutableTags ?? true,
             },
+            cleanupPolicyDryRun: args.cleanupPolicyDryRun,
+            cleanupPolicies: args.cleanupPolicies,
         }, { parent: this });
 
         this.registerOutputs({
