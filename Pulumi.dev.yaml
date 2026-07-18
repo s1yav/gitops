@@ -1,7 +1,0 @@
-config:
-  gcp:project:
-    secure: AAABAKnNvCv0ECzGQkM9JukDvFWo8aUMf3A4WKynDD6+KHMQWm7aMTRUAek/d6glbA==
-  gcp:region: us-central1
-  s1yav-git:cloudbuild-id:
-    secure: AAABAOfL1zAz0/65EWa7L1wqRWF6XLzeJQ8EETjdgTsA6wcgZ6uPGJ0=
-  s1yav-github:username: s1yav

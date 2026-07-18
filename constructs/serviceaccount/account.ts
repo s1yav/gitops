@@ -1,7 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
 
-export interface ServiceAccountArgs {
+export interface AccountArgs {
     /**
      * The service account ID (the username part of the email, e.g. "my-service-account").
      */
@@ -19,14 +19,14 @@ export interface ServiceAccountArgs {
 }
 
 /**
- * ServiceAccount Component Resource
+ * Account Component Resource
  * Provisions a reusable, parameterized Google Cloud Service Account.
  */
-export class ServiceAccount extends pulumi.ComponentResource {
+export class Account extends pulumi.ComponentResource {
     public readonly account: gcp.serviceaccount.Account;
 
-    constructor(name: string, args: ServiceAccountArgs, opts?: pulumi.ComponentResourceOptions) {
-        super("custom:components:ServiceAccount", name, args, opts);
+    constructor(name: string, args: AccountArgs, opts?: pulumi.ComponentResourceOptions) {
+        super("custom:components:Account", name, args, opts);
 
         // Provision the underlying GCP Service Account
         this.account = new gcp.serviceaccount.Account(name, {

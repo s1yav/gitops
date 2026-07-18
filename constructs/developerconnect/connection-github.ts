@@ -3,7 +3,7 @@ import * as gcp from "@pulumi/gcp";
 import * as secretmanager from "@pulumi/gcp/secretmanager";
 import * as developerconnect from "@pulumi/gcp/developerconnect";
 
-export interface GitDeveloperconnectConnectionArgs {
+export interface ConnectionGithubArgs {
     /**
      * The GCP Secret resource ID or name holding the GitHub access token.
      */
@@ -47,15 +47,15 @@ function grantSecretAccessor(
 }
 
 /**
- * GitDeveloperconnectConnection Component Resource
+ * ConnectionGit Component Resource (Developer Connect)
  * Sets up a Developer Connect connection to GitHub, provisions the necessary IAM policy
  * for the Developer Connect service agent to access the GitHub token secret, and links it.
  */
-export class GitDeveloperconnectConnection extends pulumi.ComponentResource {
+export class ConnectionGithub extends pulumi.ComponentResource {
     public readonly connection: developerconnect.Connection;
 
-    constructor(name: string, args: GitDeveloperconnectConnectionArgs, opts?: pulumi.ComponentResourceOptions) {
-        super("custom:components:GitDeveloperconnectConnection", name, args, opts);
+    constructor(name: string, args: ConnectionGithubArgs, opts?: pulumi.ComponentResourceOptions) {
+        super("custom:components:ConnectionGithub", name, args, opts);
 
         // Get the existing Secret resource using its ID/Path
         const githubAccessTokenSecret = secretmanager.Secret.get(`${name}-access-token`, args.githubAccessTokenId, {}, { parent: this });

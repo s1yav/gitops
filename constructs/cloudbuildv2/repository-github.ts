@@ -1,25 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as cloudbuildv2 from "@pulumi/gcp/cloudbuildv2";
-import * as secretmanager from "@pulumi/gcp/secretmanager";
 
-/**
- * Helper to grant the Secret Manager Secret Accessor role to a specific member.
- */
-export function grantPulumiAccessTokenSecretAccessor(
-    name: string,
-    secretId: pulumi.Input<string>,
-    member: pulumi.Input<string>,
-    parent: pulumi.Resource
-): secretmanager.SecretIamMember {
-    const pulumiAccessTokenSecret = secretmanager.Secret.get(`${name}-access-token`, secretId, {}, { parent: parent });
-    return new secretmanager.SecretIamMember(name, {
-        secretId: pulumiAccessTokenSecret.secretId,
-        role: "roles/secretmanager.secretAccessor",
-        member: member,
-    }, { parent: parent });
-}
-
-export interface GitCloudbuildRepositoryArgs {
+export interface RepositoryGithubArgs {
     /**
      * The GitHub username or organization name.
      */
@@ -48,14 +30,14 @@ export interface GitCloudbuildRepositoryArgs {
 }
 
 /**
- * GitCloudbuildRepository Component Resource
+ * RepositoryGit Component Resource
  * Links a GitHub repository to an existing Cloud Build Gen 2 connection.
  */
-export class GitCloudbuildRepository extends pulumi.ComponentResource {
+export class RepositoryGithub extends pulumi.ComponentResource {
     public readonly repository: cloudbuildv2.Repository;
 
-    constructor(name: string, args: GitCloudbuildRepositoryArgs, opts?: pulumi.ComponentResourceOptions) {
-        super("custom:components:GitCloudbuildRepository", name, args, opts);
+    constructor(name: string, args: RepositoryGithubArgs, opts?: pulumi.ComponentResourceOptions) {
+        super("custom:components:RepositoryGithub", name, args, opts);
 
         // Link the GitHub repository to the parent Cloud Build Connection
         this.repository = new cloudbuildv2.Repository(name, {

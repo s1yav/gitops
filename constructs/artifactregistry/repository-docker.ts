@@ -1,7 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
 
-export interface DockerArtifactRegistryArgs {
+export interface RepositoryDockerArgs {
     /**
      * The location/region for the repository.
      */
@@ -24,19 +24,19 @@ export interface DockerArtifactRegistryArgs {
 }
 
 /**
- * DockerArtifactRegistry Component Resource
+ * RepositoryDocker Component Resource
  * Provisions a Google Cloud Artifact Registry Docker repository with custom configuration.
  */
-export class DockerArtifactRegistry extends pulumi.ComponentResource {
+export class RepositoryDocker extends pulumi.ComponentResource {
     public readonly repository: gcp.artifactregistry.Repository;
 
-    constructor(name: string, args: DockerArtifactRegistryArgs, opts?: pulumi.ComponentResourceOptions) {
-        super("custom:components:DockerArtifactRegistry", name, args, opts);
+    constructor(name: string, args: RepositoryDockerArgs, opts?: pulumi.ComponentResourceOptions) {
+        super("custom:components:RepositoryDocker", name, args, opts);
 
         // Create the Artifact Registry repository specifically for Docker format
         this.repository = new gcp.artifactregistry.Repository(name, {
             location: args.location,
-            repositoryId: args.repositoryId,
+            repositoryId: pulumi.output(args.repositoryId).apply(id => id.toLowerCase()),
             description: args.description,
             format: "DOCKER",
             dockerConfig: {

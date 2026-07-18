@@ -3,7 +3,7 @@ import * as gcp from "@pulumi/gcp";
 import * as cloudbuild from "@pulumi/gcp/cloudbuild";
 import * as input from "@pulumi/gcp/types/input";
 
-export interface CloudbuildRepositoryTriggerArgs {
+export interface TriggerArgs {
     /**
      * The GCP Project ID.
      */
@@ -71,14 +71,14 @@ function resolveServiceAccount(projectId: pulumi.Input<string>, serviceAccount?:
 }
 
 /**
- * CloudbuildRepositoryTrigger Component Resource
+ * Trigger Component Resource
  * Provisions a Google Cloud Build trigger linked to GitHub repository push events.
  */
-export class CloudbuildRepositoryTrigger extends pulumi.ComponentResource {
+export class Trigger extends pulumi.ComponentResource {
     public readonly trigger: cloudbuild.Trigger;
 
-    constructor(name: string, args: CloudbuildRepositoryTriggerArgs, opts?: pulumi.ComponentResourceOptions) {
-        super("custom:components:CloudbuildRepositoryTrigger", name, args, opts);
+    constructor(name: string, args: TriggerArgs, opts?: pulumi.ComponentResourceOptions) {
+        super("custom:components:Trigger", name, args, opts);
 
         // Resolve the service account to be used for the trigger execution
         const serviceAccount = resolveServiceAccount(args.projectId, args.serviceAccount);

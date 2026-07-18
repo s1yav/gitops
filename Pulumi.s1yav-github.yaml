@@ -1,0 +1,11 @@
+config:
+  gcp:project:
+    secure: AAABAKnNvCv0ECzGQkM9JukDvFWo8aUMf3A4WKynDD6+KHMQWm7aMTRUAek/d6glbA==
+  gcp:region: us-central1
+  s1yav-github:cloudbuild-app-installation-id:
+    secure: AAABAOfL1zAz0/65EWa7L1wqRWF6XLzeJQ8EETjdgTsA6wcgZ6uPGJ0=
+  s1yav-github:username: s1yav
+  s1yav-github:tokenId:
+    secure: AAABAHZQikE5nSqI/wB77l3Cnqhm3igteQmonMr50Xj7mGDOLVASz35LCC9yYLtS8JXkgcojXqv+
+  s1yav-pulumi:tokenId:
+    secure: AAABAGE4HW1VzNlPTZLsuobpg/+v+n0FqZCAh0Rtuq3yugL+kCdv9lYpY0GwhQwkqshE0tTbz8WZ

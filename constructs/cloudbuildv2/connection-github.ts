@@ -1,10 +1,9 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
-import * as std from "@pulumi/std";
 import * as cloudbuildv2 from "@pulumi/gcp/cloudbuildv2";
 import * as secretmanager from "@pulumi/gcp/secretmanager";
 
-export interface GitCloudbuildConnectionArgs {
+export interface ConnectionGithubArgs {
     /**
      * The GCP Secret resource ID or name holding the GitHub access token.
      */
@@ -48,15 +47,15 @@ function grantSecretAccessor(
 }
 
 /**
- * GitCloudbuildConnection Component Resource
+ * ConnectionGit Component Resource
  * Provisions a Secret Manager secret with the GitHub token, sets up the IAM permissions for
  * cloudbuild to access it, and creates the cloudbuild Gen 2 connection to GitHub.
  */
-export class GitCloudbuildConnection extends pulumi.ComponentResource {
+export class ConnectionGithub extends pulumi.ComponentResource {
     public readonly connection: cloudbuildv2.Connection;
 
-    constructor(name: string, args: GitCloudbuildConnectionArgs, opts?: pulumi.ComponentResourceOptions) {
-        super("custom:components:GitCloudbuildConnection", name, args, opts);
+    constructor(name: string, args: ConnectionGithubArgs, opts?: pulumi.ComponentResourceOptions) {
+        super("custom:components:ConnectionGithub", name, args, opts);
 
         // Get the existing Secret resource using its ID/Path
         const githubAccessTokenSecret = secretmanager.Secret.get(`${name}-access-token`, args.githubAccessTokenId, {}, { parent: this });
