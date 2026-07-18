@@ -21,7 +21,7 @@ export const aiPairProgrammingLogRepositoryGit = new RepositoryGithub(`${repoNam
 //     repository: aiPairProgrammingLogRepositoryGit.repository.id,
 //     branchFilter: "^main$",
 //     filename: "cloudbuild.yaml",
-//     serviceAccount: s1yavCloudbuildServiceAccount.account.email,
+//     serviceAccount: s1yavCloudbuildAccount.account.email,
 //     push: {
 //         branch: "^main$",
 //     },

@@ -21,7 +21,7 @@ export const modelcontextprotocolSuiteRepositoryGit = new RepositoryGithub(`${re
 //     repository: modelcontextprotocolSuiteRepositoryGit.repository.id,
 //     branchFilter: "^main$",
 //     filename: "cloudbuild.yaml",
-//     serviceAccount: s1yavCloudbuildServiceAccount.account.email,
+//     serviceAccount: s1yavCloudbuildAccount.account.email,
 //     push: {
 //         branch: "^main$",
 //     },
