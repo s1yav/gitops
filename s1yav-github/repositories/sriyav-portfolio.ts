@@ -27,5 +27,6 @@ export const sriyavPortfolioMainTrigger = new Trigger("sriyav-portfolio-main-tri
     },
     substitutions: {
         _ARTIFACTREGISTRY_NAME: s1yavRepositoryDocker.repository.repositoryId,
+        _GITHUB_ACCESS_TOKEN_ID: githubConfig.require("tokenId"),
     },
 });
