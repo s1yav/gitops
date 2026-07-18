@@ -10,13 +10,21 @@ export const s1yavRepositoryDocker = new RepositoryDocker(`${stackName}-Reposito
     repositoryId: "s1yav-RepositoryDocker",
     description: "Docker artifact registry for storing application images",
     immutableTags: true,
+    cleanupPolicyDryRun: true,
+    cleanupPolicies: [
+        {
+            id: "delete-untagged",
+            action: "DELETE",
+            condition: {
+                tagState: "UNTAGGED",
+            },
+        },
+        {
+            id: "keep-last-30-versions",
+            action: "KEEP",
+            mostRecentVersions: {
+                keepCount: 30,
+            },
+        },
+    ],
 });
-
-// // Grant read access to the cross-project App Hosting compute runner service account
-// export const appHostingRegistryReader = new gcp.artifactregistry.RepositoryIamMember("app-hosting-registry-reader", {
-//     project: s1yavRepositoryDocker.repository.project,
-//     location: s1yavRepositoryDocker.repository.location,
-//     repository: s1yavRepositoryDocker.repository.name,
-//     role: "roles/artifactregistry.reader",
-//     member: "serviceAccount:firebase-app-hosting-compute@sriyav0599-portfolio.iam.gserviceaccount.com",
-// });
