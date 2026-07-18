@@ -4,7 +4,7 @@ import { Trigger } from "../../constructs/cloudbuild/trigger";
 import { s1yavConnectionGithub } from "../settings/installations/connection-github";
 import { s1yavCloudbuildServiceAccount } from "../cloudbuild-serviceaccount";
 
-import { gcpConfig, githubConfig, pulumiConfig } from "../configuration";
+import { gcpConfig, githubConfig, pulumiConfig, stackName } from "../configuration";
 
 export const gitopsRepositoryGit = new RepositoryGithub("gitops-repository", {
     githubUsername: githubConfig.require("username"),
@@ -26,5 +26,6 @@ export const gitopsMainTrigger = new Trigger("gitops-main-trigger", {
     },
     substitutions: {
         _PULUMI_ACCESS_TOKEN_ID: pulumiConfig.requireSecret("tokenId"),
+        _STACK_NAME: stackName,
     },
 });

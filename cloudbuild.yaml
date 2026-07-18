@@ -7,7 +7,7 @@ steps:
       - '-c'
       - |
         npm ci
-        pulumi up --yes --stack s1yav-github --non-interactive
+        pulumi up --yes --stack $_STACK_NAME --non-interactive
     secretEnv:
       - 'PULUMI_ACCESS_TOKEN'
 
@@ -16,10 +16,6 @@ availableSecrets:
   secretManager:
     - versionName: 'projects/$PROJECT_ID/secrets/$_PULUMI_ACCESS_TOKEN_ID/versions/latest'
       env: 'PULUMI_ACCESS_TOKEN'
-
-substitutions:
-  # Default Secret Manager name for the Pulumi Access Token
-  _PULUMI_ACCESS_TOKEN_ID: 'pulumi-access-token'
 
 options:
   # Log directly to Cloud Logging
