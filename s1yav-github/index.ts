@@ -1,3 +1,4 @@
+import "./projects-service-enable";
 import "./cloudbuild-serviceaccount";
 import "./settings/installations/connection-github";
 import "./repository-docker";
