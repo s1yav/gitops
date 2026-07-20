@@ -1,7 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
 import { Account } from "../constructs/serviceaccount/account";
-import { gcpConfig, githubConfig, pulumiConfig, stackName } from "./configuration";
+import { gcpConfig, stackName } from "./configuration";
 
 const projectId = gcpConfig.require("project");
 
