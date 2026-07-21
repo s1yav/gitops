@@ -8,3 +8,5 @@ import "./repositories/gitops";
 import "./repositories/ai-pair-programming-log";
 import "./repositories/prompt-engine";
 import "./repositories/modelcontextprotocol-suite";
+import "./repositories/tag-youre-init";
+
