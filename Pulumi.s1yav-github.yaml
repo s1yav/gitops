@@ -9,3 +9,5 @@ config:
     secure: AAABAHZQikE5nSqI/wB77l3Cnqhm3igteQmonMr50Xj7mGDOLVASz35LCC9yYLtS8JXkgcojXqv+
   s1yav-pulumi:tokenId:
     secure: AAABAGE4HW1VzNlPTZLsuobpg/+v+n0FqZCAh0Rtuq3yugL+kCdv9lYpY0GwhQwkqshE0tTbz8WZ
+  gitops:sriyav-firebasehost:
+    secure: AAABAIVzyhFjWnPCYRVUl5Js7yneiUPDnGVMFKADUjfszwuo+27AWZ1HGPOA35ZF2PGpwXxG3eHxVTSPxB9Ey1pUKvmuxa2WYidK3CSgDL2evUVaJfHNcNS3iJVVoZXvA9vo

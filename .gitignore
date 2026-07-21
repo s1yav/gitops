@@ -1,3 +1,4 @@
 node_modules/
 *.log
 bin/
+naming_pattern_analysis.md

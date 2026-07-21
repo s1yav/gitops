@@ -5,7 +5,7 @@ import { Trigger } from "../../constructs/cloudbuild/trigger";
 import { s1yavConnectionGithub } from "../settings/installations/connection-github";
 import { s1yavCloudbuildServiceAccount } from "../cloudbuild-serviceaccount";
 
-import { gcpConfig, githubConfig, pulumiConfig } from "../configuration";
+import { gcpConfig, githubConfig, pulumiConfig, gitopsConfig } from "../configuration";
 
 const repoName = "sriyav-firebasehost";
 
@@ -29,5 +29,6 @@ export const sriyavFirebasehostMainTrigger = new Trigger(`${repoName}-main-trigg
     },
     substitutions: {
         _PULUMI_ACCESS_TOKEN_ID: pulumiConfig.requireSecret("tokenId"),
+        _FIREBASEHOST_SERVICE_ACCOUNT: gitopsConfig.requireSecret("sriyav-firebasehost"),
     },
 });
