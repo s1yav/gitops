@@ -79,3 +79,6 @@ To onboard a repository within an onboarded GitHub account:
 4. **Register in Account Stack**: Import the new file in `<account-name>/index.ts`.
 5. **Add Cloud Build Pipeline**: Ensure a `cloudbuild.yaml` file exists in the target repository root to handle automated verification and deployment steps upon code push.
 
+<!-- Stack documentation verified: July 25, 2026 -->
+
+
