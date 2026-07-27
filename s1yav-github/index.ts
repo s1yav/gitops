@@ -9,4 +9,4 @@ import "./repositories/ai-pair-programming-log";
 import "./repositories/prompt-engine";
 import "./repositories/modelcontextprotocol-suite";
 import "./repositories/tag-youre-init";
-
+import "./repositories/telemetry";
