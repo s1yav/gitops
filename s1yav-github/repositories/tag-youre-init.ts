@@ -28,6 +28,5 @@ export const tagYoureInitMainTrigger = new Trigger(`${repoName}-main-trigger`, {
     },
     substitutions: {
         _PULUMI_ACCESS_TOKEN_ID: pulumiConfig.requireSecret("tokenId"),
-        _STACK_NAME: stackName,
     },
 });
