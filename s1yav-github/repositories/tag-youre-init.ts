@@ -16,17 +16,18 @@ export const tagYoureInitRepositoryGit = new RepositoryGithub(`${repoName}-repos
     repoName: repoName,
 });
 
-export const tagYoureInitMainTrigger = new Trigger(`${repoName}-main-trigger`, {
-    projectId: gcpConfig.require("project"),
-    location: gcpConfig.require("region"),
-    repository: tagYoureInitRepositoryGit.repository.id,
-    branchFilter: "^main$",
-    filename: "cloudbuild.yaml",
-    serviceAccount: s1yavCloudbuildServiceAccount.account.email,
-    push: {
-        branch: "^main$",
-    },
-    substitutions: {
-        _PULUMI_ACCESS_TOKEN_ID: pulumiConfig.requireSecret("tokenId"),
-    },
-});
+// export const tagYoureInitMainTrigger = new Trigger(`${repoName}-main-trigger`, {
+//     projectId: gcpConfig.require("project"),
+//     location: gcpConfig.require("region"),
+//     repository: tagYoureInitRepositoryGit.repository.id,
+//     branchFilter: "^main$",
+//     filename: "cloudbuild.yaml",
+//     serviceAccount: s1yavCloudbuildServiceAccount.account.email,
+//     push: {
+//         branch: "^main$",
+//     },
+//     substitutions: {
+//         _PULUMI_ACCESS_TOKEN_ID: pulumiConfig.requireSecret("tokenId"),
+//     },
+// });
+
