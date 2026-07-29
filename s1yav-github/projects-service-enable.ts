@@ -3,7 +3,11 @@ import { Service } from "../constructs/projects/service";
 import { gcpConfig, stackName } from "./configuration";
 
 const projectId = gcpConfig.require("project");
-const artifactRegistryServiceAccount = `serviceAccount:service-${projectId}@gcp-sa-artifactregistry.iam.gserviceaccount.com`;
+
+const project = gcp.organizations.getProjectOutput({
+    projectId,
+});
+const artifactRegistryServiceAccount = project.number.apply(num => `serviceAccount:service-${num}@gcp-sa-artifactregistry.iam.gserviceaccount.com`);
 
 // Enable Secret Manager API
 export const secretManagerService = new Service(`${stackName}-secretmanager-api`, {
