@@ -10,3 +10,4 @@ import "./repositories/prompt-engine";
 import "./repositories/modelcontextprotocol-suite";
 import "./repositories/tag-youre-init";
 import "./repositories/telemetry";
+import "./repositories/agentic-api";
