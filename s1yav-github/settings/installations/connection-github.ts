@@ -3,7 +3,6 @@ import { ConnectionGithub } from "../../../constructs/cloudbuildv2/connection-gi
 
 import { gcpConfig, githubConfig as gitConfig, stackName } from "../../configuration";
 
-// Instantiate the custom ConnectionGithub component resource
 export const s1yavConnectionGithub = new ConnectionGithub(`${stackName}-ConnectionGithub`, {
     githubAccessTokenId: gitConfig.requireSecret("tokenId"),
     location: gcpConfig.require("region"),
