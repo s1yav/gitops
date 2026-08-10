@@ -43,3 +43,8 @@ export const computeService = new Service(`${stackName}-compute-api`, {
     projectId: projectId,
     serviceName: "compute.googleapis.com",
 });
+
+export const firebaseManagementService = new Service(`${stackName}-firebasemanagement-api`, {
+    projectId: projectId,
+    serviceName: "firebase.googleapis.com",
+});
