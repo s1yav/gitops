@@ -29,6 +29,5 @@ export const sriyavFirebasehostMainTrigger = new Trigger(`${repoName}-main-trigg
     },
     substitutions: {
         _PULUMI_ACCESS_TOKEN_ID: pulumiConfig.requireSecret("tokenId"),
-        _FIREBASEHOST_SERVICE_ACCOUNT: gitopsConfig.requireSecret("sriyav-firebasehost"),
     },
 });
