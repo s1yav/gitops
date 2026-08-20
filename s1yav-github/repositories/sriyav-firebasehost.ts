@@ -1,7 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
-import { RepositoryGithub } from "../../constructs/cloudbuildv2/repository-github";
-import { Trigger } from "../../constructs/cloudbuild/trigger";
+import { RepositoryGithub } from "gcp-constructs/cloudbuildv2/repository-github";
+import { Trigger } from "gcp-constructs/cloudbuild/trigger";
 import { s1yavConnectionGithub } from "../settings/installations/connection-github";
 import { s1yavCloudbuildServiceAccount } from "../cloudbuild-serviceaccount";
 

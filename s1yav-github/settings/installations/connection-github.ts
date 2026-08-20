@@ -1,5 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
-import { ConnectionGithub } from "../../../constructs/cloudbuildv2/connection-github";
+import { ConnectionGithub } from "gcp-constructs/cloudbuildv2/connection-github";
 
 import { gcpConfig, githubConfig as gitConfig, stackName } from "../../configuration";
 

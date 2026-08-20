@@ -1,6 +1,6 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
-import { RepositoryDocker } from "../constructs/artifactregistry/repository-docker";
+import { RepositoryDocker } from "gcp-constructs/artifactregistry/repository-docker";
 
 import { gcpConfig, stackName } from "./configuration";
 

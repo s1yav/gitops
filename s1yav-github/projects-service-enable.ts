@@ -1,5 +1,5 @@
 import * as gcp from "@pulumi/gcp";
-import { Service } from "../constructs/projects/service";
+import { Service } from "gcp-constructs/projects/service";
 import { gcpConfig, stackName } from "./configuration";
 
 const projectId = gcpConfig.require("project");
