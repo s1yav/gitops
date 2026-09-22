@@ -29,7 +29,6 @@ export const agenticApiMainTrigger = new Trigger(`${repoName}-main-trigger`, {
     },
     substitutions: {
         _ARTIFACTREGISTRY_NAME: s1yavRepositoryDocker.repository.repositoryId,
-        _PULUMI_ACCESS_TOKEN_ID: pulumiConfig.requireSecret("tokenId"),
     },
     includedFiles: [
         "src/ai/agents/product-managers/**",
