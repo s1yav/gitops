@@ -30,18 +30,5 @@ export const agenticApiMainTrigger = new Trigger(`${repoName}-main-trigger`, {
     substitutions: {
         _ARTIFACTREGISTRY_NAME: s1yavRepositoryDocker.repository.repositoryId,
     },
-    includedFiles: [
-        "src/ai/agents/product-managers/**",
-        "src/ai/agents/assistants/**",
-        "src/ai/agents/mouse/**",
-        "src/ai/agents/**",
-        "src/ai/**",
-        "src/reusable-components/**",
-        "prompts/**",
-        "Dockerfile",
-        "cloudbuild.yaml",
-        "package.json",
-        "package-lock.json",
-    ],
 });
 
