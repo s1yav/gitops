@@ -9,6 +9,6 @@
         "@pulumi/gcp": "^8.0.0",
         "@pulumi/pulumi": "^3.0.0",
         "@pulumi/std": "^2.3.2",
-        "gcp-constructs": "file:../gcp-constructs"
+        "gcp-constructs": "git+https://github.com/s1yav/gcp-constructs.git"
     }
 }
