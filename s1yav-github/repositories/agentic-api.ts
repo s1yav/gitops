@@ -2,6 +2,7 @@ import * as pulumi from "@pulumi/pulumi";
 import { RepositoryGithub } from "gcp-constructs/cloudbuildv2/repository-github";
 import { Trigger } from "gcp-constructs/cloudbuild/trigger";
 import { s1yavConnectionGithub } from "../settings/installations/connection-github";
+import { s1yavRepositoryDocker } from "../repository-docker";
 import { s1yavCloudbuildServiceAccount } from "../cloudbuild-serviceaccount";
 
 import { gcpConfig, githubConfig, pulumiConfig } from "../configuration";
@@ -27,6 +28,21 @@ export const agenticApiMainTrigger = new Trigger(`${repoName}-main-trigger`, {
         branch: "^main$",
     },
     substitutions: {
+        _ARTIFACTREGISTRY_NAME: s1yavRepositoryDocker.repository.repositoryId,
         _PULUMI_ACCESS_TOKEN_ID: pulumiConfig.requireSecret("tokenId"),
-    }
+    },
+    includedFiles: [
+        "src/ai/agents/product-managers/**",
+        "src/ai/agents/assistants/**",
+        "src/ai/agents/mouse/**",
+        "src/ai/agents/**",
+        "src/ai/**",
+        "src/reusable-components/**",
+        "prompts/**",
+        "Dockerfile",
+        "cloudbuild.yaml",
+        "package.json",
+        "package-lock.json",
+    ],
 });
+
