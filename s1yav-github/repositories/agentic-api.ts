@@ -29,6 +29,7 @@ export const agenticApiMainTrigger = new Trigger(`${repoName}-main-trigger`, {
     },
     substitutions: {
         _ARTIFACTREGISTRY_NAME: s1yavRepositoryDocker.repository.repositoryId,
+        _GITHUB_ACCESS_TOKEN_ID: githubConfig.require("tokenId"),
     },
 });
 
